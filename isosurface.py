@@ -27,10 +27,9 @@ except ModuleNotFoundError:
 
 axis_template = {
     'showbackground': True,
-    'backgroundcolor': '#303030',
+    'backgroundcolor': '#eceff1',
     'gridcolor': 'rgb(255, 255, 255)',
     'zerolinecolor': 'rgb(255, 255, 255)',
-    'title': 'Lon',
 }
 
 init_plot_layout = {
@@ -60,7 +59,7 @@ config3d = {'editable': False,
             }
 config2d = {'editable': False, 'scrollZoom': True, 'displayModeBar': False, 'displaylogo': False}
 
-
+txt_color="#263238"
 app = dash.Dash(
     __name__,
     meta_tags=[
@@ -71,6 +70,7 @@ app = dash.Dash(
 
 
 )
+version = '0.0.0'
 
 server = app.server
 
@@ -81,7 +81,39 @@ app.layout = html.Div([
     html.Div(id='container', children=[
         # left column
         html.Div(id='left-column', children=[
-            html.Button('Load', id='button')
+            html.Div(id='header', children=[
+                html.Img(src=app.get_asset_url('logo.svg'), style={'width': '80%'}),
+                html.H4('IsoSurface Visualization', className='header', ),
+                html.H4(version, className='header pb-20', ),
+            ]),
+            html.Div(id ='sliders-div', children=[
+                        html.P(children='Limit sliders', style={'display': 'inline-block'}, className='subheader'),
+                html.Div(id='min-div', children=[
+                    html.P(children='Min:', className='legend'),
+                    dcc.Slider(id="min-sl",
+                               min=0, max=30000, step=10, value=500,
+                               marks={
+                                   0: {'label': '0', 'style': {'color': txt_color}},
+                                   7500: {'label': '7.5k', 'style': {'color': txt_color}},
+                                   15000: {'label': '15k', 'style': {'color': txt_color}},
+                                   22500: {'label': '22.5k', 'style': {'color': txt_color}},
+                                   30000: {'label': '30k', 'style': {'color': txt_color}}, }, className='legend'
+                               ),
+                ]),
+                html.Div(id='max-div', children=[
+                    html.P(children='Max:', className='legend'),
+                    dcc.Slider(id="max-sl",
+                               min=0, max=30000, step=10, value=20000,
+                               marks={
+                                   0: {'label': '0', 'style': {'color': txt_color}},
+                                   7500: {'label': '7.5k', 'style': {'color': txt_color}},
+                                   15000: {'label': '15k', 'style': {'color': txt_color}},
+                                   22500: {'label': '22.5k', 'style': {'color': txt_color}},
+                                   30000: {'label': '30k', 'style': {'color': txt_color}}, }, className='legend'
+                               ),
+                ]),
+            ]),
+            html.Button('Load', id='button'),
         ], className='one-third30 column app__left__section', ),
 
         # Right Column
@@ -106,8 +138,9 @@ app.layout = html.Div([
 ])
 
 
-@app.callback([Output('3D-model-sur', 'figure'),Output('3D-model-vol', 'figure')],[Input('button', 'n_clicks')])
-def load3d(nclick):
+@app.callback([Output('3D-model-sur', 'figure'),Output('3D-model-vol', 'figure')],
+              [Input('button', 'n_clicks'),Input('max-sl', 'value'),Input('min-sl', 'value')])
+def load3d(nclick, max_value, min_value):
     df = pd.read_csv('./modello_area_A.xyz', header=None, index_col=False , names=['X', 'Y', 'Z', 'data'], delimiter='\t')
     #print(df)
     fig=go.Figure()
@@ -141,14 +174,16 @@ def load3d(nclick):
 
     d = D.flatten()
 
+    d[d>max_value]=0
+
 
     fig_sur = go.Figure(data=go.Isosurface(
         x=x,
         y=y,
         z=z,
         value=d,
-        isomin=500,
-        isomax=30000,
+        isomin=min_value,
+        isomax=max_value,
         opacity=0.1,  # needs to be small to see through all surfaces
         surface_count=17,  # needs to be a large number for good volume rendering
     ))
@@ -156,7 +191,7 @@ def load3d(nclick):
                       margin=dict(t=0, b=0, l=0, r=0),
                       font=dict(size=12, color='white'),
                       showlegend=False,
-                      plot_bgcolor='#303030', paper_bgcolor='#303030',
+                      plot_bgcolor='#cfd8dc', paper_bgcolor='#cfd8dc',
                       scene=dict(xaxis=axis_template, yaxis=axis_template, zaxis=axis_template, ),
                       hoverlabel=dict(namelength=0),
                       )
@@ -165,8 +200,8 @@ def load3d(nclick):
         y=y,
         z=z,
         value=d,
-        isomin=500,
-        isomax=30000,
+        isomin=min_value,
+        isomax=max_value,
         opacity=0.1,  # needs to be small to see through all surfaces
         surface_count=17,  # needs to be a large number for good volume rendering
     ))
@@ -174,7 +209,7 @@ def load3d(nclick):
                       margin=dict(t=0, b=0, l=0, r=0),
                       font=dict(size=12, color='white'),
                       showlegend=False,
-                      plot_bgcolor='#303030', paper_bgcolor='#303030',
+                      plot_bgcolor='#cfd8dc', paper_bgcolor='#cfd8dc',
                       scene=dict(xaxis=axis_template, yaxis=axis_template, zaxis=axis_template, ),
                       hoverlabel=dict(namelength=0),
                       )
