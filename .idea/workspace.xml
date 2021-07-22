@@ -3,9 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="85e88ec9-563e-4a1e-9e06-c601263c7acf" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/default.css" beforeDir="false" afterPath="$PROJECT_DIR$/assets/default.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/logo.svg" beforeDir="false" afterPath="$PROJECT_DIR$/assets/logo.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/assets/style.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/isosurface.py" beforeDir="false" afterPath="$PROJECT_DIR$/isosurface.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -174,7 +171,7 @@
       <workItem from="1625827097702" duration="5238000" />
       <workItem from="1626096906601" duration="18683000" />
       <workItem from="1626687762419" duration="1464000" />
-      <workItem from="1626697857999" duration="14823000" />
+      <workItem from="1626697857999" duration="17537000" />
     </task>
     <servers />
   </component>
